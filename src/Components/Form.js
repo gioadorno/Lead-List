@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 
 // Form to add new lead to table
 
-const Form = ({ form, title, name, date, type, email, phone, market, inputType, inputClass, label, placeholder, markets, submit, radioClass, radioName }) => {
+const Form = ({ form, title, name, date, type, email, phone, market, inputType, inputClass, label, placeholder, markets, submit, radioClass, radioName, marketPlaceholder, disable }) => {
 
     const mouseOver = (e) => {
         e.target.style.color = 'red'
@@ -30,8 +31,6 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
     }
 
     // Format Phone Number Field (Automated for users to input numbers and insert dashes/paranthesis automatically)
-
-
     const onKey = (e) => {
         const phone = document.querySelector('.phone')
         let regexpr0 = /\D/g
@@ -43,10 +42,10 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
             phone.value = cNum.substring(0)
         }
         if (3 < cNum.length && cNum.length <= 6) {
-            phone.value = "(" + cNum.substring(0,3) + ")" + "-" + cNum.substring(3)
+            phone.value = "(" + cNum.substring(0,3) + ")-" + cNum.substring(3)
         }
         if (7 <= cNum.length) {
-            phone.value = "(" + cNum.substring(0,3) + ")" + "-" + cNum.substring(3, 6) + "-" + cNum.substring(6)
+            phone.value = "(" + cNum.substring(0,3) + ")-" + cNum.substring(3, 6) + "-" + cNum.substring(6)
         }
 
 
@@ -57,67 +56,34 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
 
         let rawNumbers = phone.value.replace(regexpr0, "");
 
-        if ( rawNumbers.length > 9 && e.key != "Backspace") {
+        if ( rawNumbers.length > 9 && e.key !== "Backspace") {
             e.preventDefault()
         };
     }
     
+    // Get Input Field Values
+    const [nameValue, setName] = useState('');
+    const [dateValue, setDate] = useState('');
+    const [typeValue, setType] = useState('');
+    const [emailValue, setEmail] = useState('');
+    const [phoneValue, setPhone] = useState('');
+    const [marketValue, setMarket] = useState('');
+
+
+    const formSubmit = (e) => {
+        console.log(nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue);
+        // const formValue = [nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue];
+        // console.log(formValue);
+
+        const formValue = [nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue];
+
+        var ID = Math.random().toString(36).substr(2, 5);
+        localStorage.setItem(ID, JSON.stringify(formValue));
+    };
 
     
-    // const emailInput = document.querySelector('.email');
 
-    // const emailLeave = () => {
-    //     emailInput.value > '' && emailInput.value.includes('@') ? emailInput.style.borderColor = 'aqua' : emailInput.style.backgroundColor = 'red';
 
-    //     emailInput.value.includes('@') ? emailInput.style.backgroundColor = '61c2e757' : emailInput.style.backgroundColor = 'red';
-    // }
-
-    const onSubmit = () => {
-        
-        const nameValue = document.querySelector('.name').value;
-        const dateValue = document.querySelector('.date').value;
-
-    // --------------
-    // Selection for type of Buyer/Seller
-
-        // const buyerSelect = document.querySelector('.buyer');
-        // const sellerSelect = document.querySelector('.seller');
-
-        const typeValue = document.querySelector('input[name="type"]:checked').value;
-
-        // if (buyerSelect.checked) {
-        //     var buyerValue = document.querySelector('buyer').value
-        // };
-        // if (sellerSelect.checked) {
-        //     var sellerValue = document.querySelector('seller').value
-        // };
-
-        // var typeValue;
-
-        // buyerValue != undefined ? typeValue = 'Buyer' : sellerValue != undefined ? typeValue = 'Seller' : null;
-
-        // if (buyerValue != undefined) {
-        //     var typeValue = 'Buyer'
-        // }
-        // if (sellerValue != undefined) {
-        //     var typeValue = 'Seller'
-        // }
-
-    // --------------
-
-        const emailValue = document.querySelector('email').value;
-        const phoneValue = document.querySelector('.phone').value;
-
-        const markets = document.querySelector('.market');
-        const marketValue = markets.options[markets.selectedIndex].value;
-
-        const formValue = {
-            lead: [nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue]
-        }
-
-        console.log(formValue)
-        
-    }
 
     return (
         <div className={form} style={divStyle}>
@@ -127,22 +93,23 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
                         {title}
                     </h1>
                 </div>
-                <form onSubmit={onSubmit} style={inputDivStyle}>
+                <form  style={inputDivStyle} onSubmit={formSubmit} >
                     {/* Name */}
                     <h1 style={inputHeaderStyle}>
                         {name} 
                     </h1>
-                    <input type={inputType.text} placeholder={placeholder.name} className={inputClass.name} style={inputStyle} />
+                    <input type={inputType.text} placeholder={placeholder.name} className={inputClass.name} onChange={e => setName(e.target.value)} style={inputStyle} />
                     {/* Date */}
                     <h1 style={inputHeaderStyle}> 
                         {date} 
                     </h1>
-                    <input type={inputType.date} className={inputClass.date} style={inputStyle} />
+                    <input type={inputType.date} className={inputClass.date} onChange={e => setDate(e.target.value)} style={inputStyle} />
                     {/* Type */}
                     <h1 className={inputClass.type} style={inputHeaderStyle}> 
                         {type} 
                     </h1>
-                    <div style={radioStyle}>
+                    
+                    <div style={radioStyle} onChange={e => setType(e.target.value)}>
                         <div style={radioButtonStyle}>
                             <input className={radioClass.buyer} value={radioClass.buyer} type={inputType.radio} name={radioName.type} />
                             <label style={labelStyle}>
@@ -160,17 +127,18 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
                     <h1 style={inputHeaderStyle}> 
                         {email} 
                     </h1>
-                    <input type={inputType.email} placeholder={placeholder.email} className={inputClass.email} style={inputStyle} />
+                    <input type={inputType.email} placeholder={placeholder.email} className={inputClass.email} onChange={e => setEmail(e.target.value)} style={inputStyle} />
                     {/* Phone Number */}
                     <h1 style={inputHeaderStyle}> 
                         {phone} 
                     </h1>
-                    <input className={inputClass.phone} placeholder={placeholder.phone} onKeyDown={onKey} style={inputStyle} />
+                    <input className={inputClass.phone} placeholder={placeholder.phone} onKeyDown={onKey} onChange={e => setPhone(e.target.value)} style={inputStyle} />
                     {/* Market */}
                     <h1 style={inputHeaderStyle}> 
                         {market} 
                     </h1>
-                    <select placeholder={placeholder.market} className={inputClass.market} style={inputStyle}>
+                    <select placeholder={placeholder.market} className={inputClass.market} onChange={e => setMarket(e.target.value)} style={inputStyle}>
+                        <option/>
                         <option value={markets.orlando}>
                             {markets.orlando}
                         </option>
@@ -206,7 +174,7 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
                         </option>
                     </select>
                     {/* Submit Button */}
-                    <button className={inputClass.submit} onMouseOver={submitHover} onMouseOut={submitLeave} onSubmit={onSubmit} style={submitStyle}>
+                    <button className={inputClass.submit} onMouseOver={submitHover} onMouseOut={submitLeave} style={submitStyle}>
                         {submit}
                     </button>
                 </form>
@@ -227,6 +195,8 @@ Form.defaultProps = {
     phone: 'Phone Number:',
     market: 'Market:',
     submit: 'Submit',
+    marketPlaceholder: 'Select a Market',
+    disable: 'disabled',
     markets: {
         orlando: 'Orlando, FL',
         memphis: 'Memphis, TN',
@@ -313,7 +283,7 @@ const divStyle = {
     position: 'absolute',
     width: '60em',
     height: '70em',
-    display: 'flex',
+    display: 'none',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000000b3',

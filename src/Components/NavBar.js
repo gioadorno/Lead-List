@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { BiBot } from 'react-icons/bi'
 
 // Top NavBar with Title and Add Lead Button to open form
 
@@ -24,6 +25,7 @@ const NavBar = ({ name, buttonText, openForm }) => {
             <button onMouseEnter={mouseOver} onMouseLeave={mouseLeave} onMouseDown={mouseClick} style={buttonStyle}> 
                 {buttonText}
             </button>
+            <BiBot style={botStyle} />
         </div>
     )
 }
@@ -67,13 +69,18 @@ const headerStyle = {
 const buttonStyle = {
     position: 'absolute',
     left: '5em',
-    height: '1em',
     backgroundColor: '#32fafffc',
     color: 'black',
     width: '12em',
     height: '4em',
     weight: '550',
     fontSize: '.8em'
+}
+
+const botStyle = {
+    fontSize: '1.8em',
+    color: 'red',
+    marginLeft: '.1em'
 }
 
 

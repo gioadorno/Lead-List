@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types'
+import TableData from './TableData'
+
 
 // Main Body Component that outputs info to Table
 
@@ -16,6 +18,7 @@ const Table = ({ name, date, type, email, phone, market }) => {
                         <th style={headerStyle}> {market} </th>
                     </tr>
                 </thead>
+                <TableData />
             </table>
         </div>
     )
@@ -61,8 +64,10 @@ const tableStyle = {
     width: '95%',
     height: '95%',
     backgroundColor: '#000000a6',
-    justifyContent: 'center',
-    boxShadow: "0px 0px 0px 1px #62ffe9"
+    justifyContent: 'flex-start',
+    boxShadow: "0px 0px 0px 1px #62ffe9",
+    flexDirection: 'column',
+    alignItems: 'center'
 }
 
 const tableHeaderStyle = {
@@ -98,11 +103,6 @@ const headerStyle = {
 }
 
 
-const tableBodyStyle = {
-    width: '97%',
-    height: '90%',
-    backgroundColor: 'white'
-}
 
 
 export default Table
