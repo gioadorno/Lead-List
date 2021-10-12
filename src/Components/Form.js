@@ -18,8 +18,6 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
         document.querySelector('.form').style.display = 'none'
     }
 
-
-
     const submitHover = () => {
         const submitButton = document.querySelector('.submitButton')
         submitButton.style.backgroundColor = 'tomato'
@@ -75,7 +73,16 @@ const Form = ({ form, title, name, date, type, email, phone, market, inputType, 
         // const formValue = [nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue];
         // console.log(formValue);
 
-        const formValue = [nameValue, dateValue, typeValue, emailValue, phoneValue, marketValue];
+        const nameKey = 'N' + Math.random().toString(36).substr(2, 5);
+       const dateKey = 'D' + Math.random().toString(36).substr(2, 5);
+       const typeKey = 'T' + Math.random().toString(36).substr(2, 5);
+        const emailKey = 'E' + Math.random().toString(36).substr(2, 5);
+       const phoneKey = 'P' + Math.random().toString(36).substr(2, 5);
+       const marketKey = 'M' + Math.random().toString(36).substr(2, 5);
+       const tbodyKey = 'TBody' + Math.random().toString(36).substr(2, 5);
+       const rowKey = 'Row' + Math.random().toString(36).substr(2, 5);
+
+        const formValue = [nameKey, nameValue, dateKey, dateValue, typeKey, typeValue, emailKey, emailValue, phoneKey, phoneValue, marketKey, marketValue, tbodyKey, rowKey];
 
         var ID = Math.random().toString(36).substr(2, 5);
         localStorage.setItem(ID, JSON.stringify(formValue));
@@ -238,8 +245,8 @@ Form.defaultProps = {
         submit: 'submitButton'
     },
     radioClass: {
-        buyer: 'buyer',
-        seller: 'seller'
+        buyer: 'Buyer',
+        seller: 'Seller'
     },
     radioName: {
         type: 'type'
